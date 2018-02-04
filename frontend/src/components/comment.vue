@@ -1,5 +1,6 @@
 <template>
 <div>
+   
 <el-row v-for="item in items" :key="item.message"> 
   <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
     {{item.message}}

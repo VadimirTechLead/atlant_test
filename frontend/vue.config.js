@@ -1,3 +1,10 @@
+const path = require("path");
+
 module.exports = {
-  lintOnSave: true
-}
+  lintOnSave: true,
+  configureWebpack: {
+    output: {
+      path: path.resolve(__dirname, "../server/public")
+    }
+  }
+};
