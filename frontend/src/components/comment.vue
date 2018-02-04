@@ -1,55 +1,52 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Link`1111111111111111111111</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-    <el-input placeholder="Please input" v-model="input"></el-input>
-  </div>
+<div>
+<el-row v-for="item in items" :key="item.message"> 
+  <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
+    {{item.message}}
+    <el-button type="primary">удалить</el-button>
+  </el-col>
+</el-row>
+</div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
-  props: {
-    msg: String
-  },
+  name: "comment",
   data() {
     return {
-      input: "test4444"
+      items: [
+        { message: 1 },
+        { message: 2 },
+        { message: 3 },
+        { message: 4 },
+        { message: 5 },
+        { message: 6 },
+        { message: 7 },
+        { message: 8 },
+        { message: 9 },
+        { message: 10 }
+      ]
     };
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1,
-h2 {
-  font-weight: normal;
+
+<style>
+.el-col {
+  border-radius: 4px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.bg-purple-dark {
+  background: #99a9bf;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.bg-purple {
+  background: #d3dce6;
 }
-a {
-  color: #42b983;
+.bg-purple-light {
+  background: #e5e9f2;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
 }
 </style>

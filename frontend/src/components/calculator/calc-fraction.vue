@@ -1,17 +1,19 @@
 <template>
   <div>  
-    <el-col  v-if="operatorInput!==false" :span="4">
-      <el-input @input="input('operator')"  v-if="type=='input'" placeholder="Please input" v-model="operatorInput"></el-input>
+    <el-col  v-if="operatorInput!==false" :span="3">
+      <el-row :gutter="60">
+      <el-input @input="input('operator')" pattern="^1"  v-if="type=='input'" placeholder="Please input" v-model="operatorInput"></el-input>
       <div v-else>=</div>
+      </el-row>
     </el-col>
-    <el-col :span="4">
+    <el-col :span="3">
       <el-row :gutter="20">
         <el-input-number v-if="type=='input'" :controls=false @input="input('numerator')"  placeholder="Please input" v-model="numeratorInput"></el-input-number>
-        <div v-else v-text="numerator"></div>
+        <div class="static" v-else v-text="numerator" ></div>
         </el-row>
         <el-row :gutter="20">
           <el-input-number  v-if="type=='input'" :controls=false  @input="input('denominator')"  placeholder="Please input" v-model="denominatorInput"></el-input-number>
-        <div v-else v-text="denominator"></div>
+        <div  class="static" v-else v-text="denominator"></div>
         </el-row>
    </el-col>
   </div>

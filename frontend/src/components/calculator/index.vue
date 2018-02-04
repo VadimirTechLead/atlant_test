@@ -1,22 +1,27 @@
 <template> 
   <el-row type="flex" justify="center">
   <el-col >1</el-col>
-  <calc-fraction v-for="(el,key) in elements" :key="key" 
+  <calc-fraction v-for="(el,key) in elements" :key="el.id" 
   :type="el.type" 
   :operator="el.operator" 
   :numerator="el.numerator" 
   :denominator="el.denominator" 
   @change="data=>update(data,key)"
   ></calc-fraction>
-  <el-col >
+  <el-col class="button">
      <el-button @click= "add">добавить</el-button></el-col>
-   
+     <el-button v-if="erOper" @click= "reCalc" type="danger">ошибка оператора</el-button>
 </el-row>
 </template>
 <script>
 import calcFraction from "./calc-fraction";
 import * as fractional from "fractional";
-const { Fraction } = fractional;
+const { Fraction: FractionRoot } = fractional;
+class Fraction extends FractionRoot {
+  constructor({ denominator, numerator }) {
+    super(numerator, denominator);
+  }
+}
 export default {
   name: "calculator",
   components: {
@@ -29,47 +34,82 @@ export default {
           type: "input",
           operator: false,
           numerator: 1,
-          denominator: 1
+          denominator: 1,
+          id: 0
         },
         {
           type: "input",
           operator: "+",
           numerator: 2,
-          denominator: 2
+          denominator: 2,
+          id: 1
         },
         {
           type: "result",
           operator: "=",
           numerator: 1,
-          denominator: 2
+          denominator: 2,
+          id: 2
         }
-      ]
+      ],
+      erOper: false
     };
   },
   methods: {
     update(data, key) {
       let element = this.elements[key];
-
       this.$set(element, data.prop, data.value);
       this.reCalc();
     },
     reCalc() {
-      let result = this.elements.reduce((result, el) => {
-        console.log(el);
-        let { numerator, denominator } = el;
-        if (result == false) {
-          return new Fraction(numerator, denominator);
-        }
-        let method = this.operatorToMethod(el.operator);
-        if (!method) {
+      this.erOper = false;
+      let elements = [...this.elements];
+      elements.push(123123);
+      let inputs = this.elements.filter(element => element.type == "input");
+      let result;
+      try {
+        result = this.calc(inputs);
+      } catch (err) {
+        this.erOper = true;
+        result = {
+          errror: err
+        };
+      }
+      let resultElement = this.elements.find(
+        element => element.type == "result"
+      );
+      this.$set(resultElement, Object.assign(resultElement, result));
+    },
+    calc(inputs) {
+      let BeforeCalc = inputs.reduce((result, element) => {
+        if (element.operator == "*" || element.operator == "/") {
+          let prevElement = result.pop();
+          let { operator: prevOperator, type } = prevElement;
+          let method = this.operatorToMethod(element.operator);
+          if (method == false) {
+            throw "error operator";
+          }
+          let fraction = new Fraction(prevElement)[method](
+            new Fraction(element)
+          );
+          fraction.operator = prevOperator;
+          fraction.type = type;
+          result.push(fraction);
           return result;
         }
-        return result[method](new Fraction(numerator, denominator));
+        result.push(element);
+        return result;
+      }, []);
+      return BeforeCalc.reduce((result, element) => {
+        if (result == false) {
+          return new Fraction(element);
+        }
+        let method = this.operatorToMethod(element.operator);
+        if (method == false) {
+          throw "error operator";
+        }
+        return result[method](new Fraction(element));
       }, false);
-      let resultElement = this.elements.find(el => el.type == "result");
-      // Object.assign(resultElement, result);
-      this.$set(resultElement, Object.assign(resultElement, result));
-      console.log(result, resultElement);
     },
     add() {
       let index = this.elements.findIndex(el => el.type == "result");
@@ -77,7 +117,8 @@ export default {
         type: "input",
         operator: "+",
         numerator: 2,
-        denominator: 2
+        denominator: 2,
+        id: this.elements.length
       };
       this.elements.splice(index - 1, 0, element);
     },
@@ -94,6 +135,8 @@ export default {
 
         case "-":
           return "subtract";
+        default:
+          return false;
       }
     }
   }

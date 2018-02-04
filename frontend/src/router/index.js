@@ -3,10 +3,12 @@ import VueRouter from "vue-router";
 // import hello from "./components/HelloWorld";
 const calculator = () => import("../components/calculator/index");
 const comment = () => import("../components/comment");
+const start = () => import("../components/start");
 
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/", component: start },
   { path: "/calculator", component: calculator },
   { path: "/comment", component: comment }
 ];
