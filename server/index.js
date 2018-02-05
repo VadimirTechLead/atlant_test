@@ -1,6 +1,6 @@
 var http = require("http");
 var static = require("node-static");
-var file = new static.Server("./server/public");
+var file = new static.Server("./public");
 const WsHendler = require("./socket");
 const port = process.env.PORT || 3000;
 var server = http
