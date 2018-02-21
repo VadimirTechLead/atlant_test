@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/slonik6663444/atlant_test#readme",
   "dependencies": {
+    "git": "^0.1.5",
+    "koa": "^2.5.0",
     "node-static": "^0.7.10",
+    "web3": "^1.0.0-beta.30",
     "websocket": "^1.0.25"
   }
 }
